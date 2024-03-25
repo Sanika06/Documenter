@@ -1,0 +1,130 @@
+@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,500");
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Raleway", sans-serif;
+}
+
+.cards {
+  position: relative;
+  padding: 80px 60px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.cards.style-1 {
+  background: #83a4d4;
+  background: -webkit-linear-gradient(to right, #b6fbff, hsl(216, 49%, 67%));
+  background: linear-gradient(to right, #b6fbff, #83a4d4);
+  padding: 10px;
+  /* margin: 5px; */
+}
+
+.cards .col {
+  -webkit-flex-basis: 0;
+  -ms-flex-preferred-size: 0;
+  flex-basis: 0;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-flex: 0 0 33.333%;
+  -ms-flex: 0 0 33.333%;
+  flex: 0 0 33.333%;
+  max-width: 33.333%;
+  padding: 0 30px;
+}
+
+.card {
+  position: relative;
+  color: #fff;
+  background-color: #00b7c2;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.card-title {
+  position: relative;
+  padding: 20px 25px 5px;
+  font-size: 2em;
+  font-weight: 500;
+}
+
+.card-title:before {
+  content: "";
+  position: absolute;
+  left: 25px;
+  top: 0;
+  width: 50px;
+  height: 50px;
+  margin-top: -25px;
+  background-color: #00b7c2;
+  border-radius: 50%;
+  -webkit-transition: transform 600ms cubic-bezier(0.86, 0, 0.07, 1),
+    opacity 400ms cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: transform 600ms cubic-bezier(0.86, 0, 0.07, 1),
+    opacity 400ms cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.card:hover .card-title:before {
+  opacity: 0.8;
+  transform: scale(0.6);
+}
+
+.card-description {
+  padding: 5px 25px 20px;
+  line-height: 30px;
+}
+
+.absent {
+}
+
+.button-41 {
+  background-color: initial;
+  background-image: linear-gradient(-180deg, #00d775, #00bd68);
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-block;
+  /* font-family: Inter, -apple-system, system-ui, Roboto, "Helvetica Neue", Arial, sans-serif; */
+  font-family: -apple-system, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 200;
+  letter-spacing: -0.24px;
+  height: 44px;
+  line-height: 44px;
+  outline: 0;
+  overflow: hidden;
+  padding: 0 20px;
+  pointer-events: auto;
+  position: relative;
+  text-align: center;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: top;
+  white-space: nowrap;
+  width: 100%;
+  z-index: 9;
+  border: 0;
+  margin-top: 30px;
+}
+
+.button-41:hover {
+  background: #00bd68;
+}
