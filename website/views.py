@@ -5,35 +5,54 @@ from .ocrFunc import scanning
 from .models import register_info
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import redirect, url_for, Blueprint, render_template, request, flash, current_app as app
+from flask import redirect, url_for, Blueprint, render_template, request, flash, current_app as app, session
 
 views = Blueprint('views', __name__)
 
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @views.route("/dashboard", methods=['GET', 'POST'])
 def dashboard():
 
+    userId = session.get('user-id')
+    name = ""
+    if userId:
+        name = register_info.query.filter_by(Email = userId).first()
+        if name:
+            name = name.Name
+        # print(name)
+   
     if request.method == 'POST':
         file = request.files['fileToUpload']
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for("ocrFunc.scanning", file_path=os.path.join(app.config['UPLOAD_FOLDER'], filename)))
+            newPath = (os.path.join(app.config['UPLOAD_FOLDER'], userId))
+            if not os.path.exists(newPath):
+                os.makedirs(newPath)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], userId, filename))
+            return redirect(url_for("ocrFunc.scanning", file_path=os.path.join(app.config['UPLOAD_FOLDER'], userId, filename)))
         else:
             flash('Some Error Occurred')
             return redirect(request.url)
 
-    return render_template("dashboard.html")
+    return render_template("dashboard.html", text = "Welcome " + name + ", Let's Organize Your World !")
+
+@views.route("/logout", methods=['GET', 'POST'])
+def logout():
+    session.clear()
+    return redirect(url_for("views.register"))
 
 @views.route("/login", methods=['GET','POST'])
 def login():
 
     if request.method == "POST":
         email = request.form.get('Email')
+        session['user-id'] = email
         passwd = request.form.get('password')
         registerations = register_info.query.all()
         for var in registerations:
@@ -50,7 +69,7 @@ def register():
     if request.method == 'POST':
 
         loginbutton = request.form.get('button')
-        print(loginbutton)
+        # print(loginbutton)
         name = request.form.get('name')
         email = request.form.get('email')
         phone = request.form.get('phoneno')
@@ -63,11 +82,12 @@ def register():
             for i in passwd:
                 if i.isupper() or i.islower():
                     flag += 1
-            if flag != 3:
-                flash("Invalid password", category="error")
+            if flag != 2:
+                flash("Invalid password Entered :  (Req - 1 Upper and 1 lower case letter)", category="error")
         elif not re.match(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$', email):
             flash("Invalid Email id", category="error")
-
+        elif register_info.query.filter_by(Email=email).first() and loginbutton == "Register Now":
+            flash("Email already exists, try logging in!", category="error")
         else:
             from . import db
             new_registeration = register_info(Name=name, Email=email, Phone_no=phone, Password=generate_password_hash(passwd, method='pbkdf2:sha256'))

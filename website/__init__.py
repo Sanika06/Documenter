@@ -17,8 +17,10 @@ def createApp():
     from .models import register_info
     from .views import views
     from .ocrFunc import ocrFunc
+    from .profile import profile
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(ocrFunc, url_prefix='/')
+    app.register_blueprint(profile, url_prefix='/')
     db.init_app(app)
     create_db(app)
     return app

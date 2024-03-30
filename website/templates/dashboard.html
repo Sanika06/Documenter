@@ -1,15 +1,96 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>File Upload and Scan</title>
+    <title>File Upload</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        span{
+            text-align: left;
+        }
+        body {
+            background-image: url("{{ url_for('static', filename='images/bgimage.jpeg') }}");
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scrolling */
+        }
+        .navbar {
+            width: 100%;
+            padding: 10px 20px;
+            background-color:  rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(100, 64, 64, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar i {
+            font-size: 24px;
+            margin-left: 20px;
+        }
+        .container {
+            margin-top: 300px; /* Adjusted margin-top */
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        h2 {
+            margin-top: 0;
+        }
+        form {
+            text-align: center;
+        }
+        div{
+            font-size: 16px;
+            margin-right: 20px;
+        }
+        .extension-container {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(244, 246, 247, 0.8);
+            padding: 5px 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+    </style>
 </head>
 <body>
-    <h2>Upload a File</h2>
-    <form  method="post" enctype="multipart/form-data">
-        <input type="file" name="fileToUpload" id="fileToUpload">
-        <!-- <button type="submit" name="scanButton">Scan</button> -->
-        <button type="submit" name="submit">Submit</button>
-        <!-- <button type="submit" name="Capture"> Submit </button> -->
-    </form>
+    <div class="navbar">
+        <a href="{{ url_for('profile.profilePage') }}">
+            <i class="fas fa-user"></i> 
+        </a>
+        <span>{{ text }}</span> 
+        <div><a href="{{ url_for('views.logout') }}">Logout</a> </div> <!-- Logout button on the right -->
+    </div>
+    
+    <div class="container">
+        <h2>Upload a File</h2>
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="fileToUpload" id="fileToUpload">
+            <button type="submit" name="submit">Submit</button>
+        </form>
+        <br><br>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}" style="color:black">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+    
+    </div>
+    <div class="extension-container">
+        Available extensions: jpeg, jpg, png
+    </div>
 </body>
 </html>

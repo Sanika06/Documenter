@@ -11,7 +11,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #4070f4;
+  /* background: #4070f4; */
+  background: linear-gradient(to top, #6972f6, #0237b3);
 }
 
 .wrapper {
@@ -50,6 +51,12 @@ body {
 .wrapper form .input-box {
   height: 52px;
   margin: 20px 0;
+}
+
+.flash-messages {
+  list-style-type: none;
+  padding: 0;
+  text-align: center;
 }
 
 form .input-box input {

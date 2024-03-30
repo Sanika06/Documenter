@@ -2,6 +2,13 @@
   font-family: "Poppins";
 }
 
+.flash-messages {
+  list-style-type: none;
+  padding: 0;
+  text-align: center; 
+}
+
+
 body {
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -12,11 +19,12 @@ body {
   justify-content: center;
   align-items: center;
   background: #dde5f4;
+  /* background: #90b4c2; */
   height: 100vh;
 }
 
 .screen-1 {
-  background: #f1f7fe;
+  background: #f7faf9;
   padding: 2em;
   display: flex;
   flex-direction: column;
@@ -109,7 +117,7 @@ body {
 .screen-1 .login {
   padding: 1em;
   background: #3e4684;
-  color: white;
+  color: rgb(118, 191, 173);
   border: none;
   border-radius: 30px;
   font-weight: 600;

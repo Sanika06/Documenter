@@ -4,9 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OCR </title>
-    <!-- <pre>{{ text }}</pre> -->
+    <style>
+        body {
+            display: grid;
+            grid-template-columns: calc(65% - 10px) calc(35% - 10px); /* Two columns with 10px gap */
+            gap: 20px;
+            padding: 20px;
+        }
+        .text-container {
+            overflow-y: auto; /* Add vertical scrollbar if content exceeds container height */
+            white-space: pre-wrap; /* Display text on new lines if space is not available */
+        }
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh; /* Make the container take up the full height of the viewport */
+            align-items: center; /* Center the buttons vertically */
+            justify-content: center; /* Center the buttons horizontally */
+            background-color: #f0f0f0; /* Colored background for visual separation */
+            border-left: 2px solid #007bff; /* Colored border for visual separation */
+            padding-left: 20px; /* Padding for visual separation */
+        }
+        button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    
+    <div class="text-container">
+        <pre>{{ text }}</pre>
+    </div>
+    <div class="input-container">
+        <button value="Button 1">Button 1</button>
+        <button value="Button 2">Button 2</button>
+        <button value="Button 3">Button 3</button>
+        <button value="Button 4">Button 4</button>
+        <button value="Submit">Submit</button>
+    </div>
 </body>
 </html>
