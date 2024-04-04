@@ -8,4 +8,17 @@ class register_info(db.Model, UserMixin):
     Email = db.Column(db.String(50), nullable=False, primary_key=True)
     Phone_no = db.Column(db.String(10), nullable=False)
     Password = db.Column(db.String(50), nullable=False)
- 
+
+class queryAndFeedback(db.Model, UserMixin):
+    No = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    Email = db.Column(db.String(50), nullable=False)
+    Feedback = db.Column(db.String(100), nullable=False)
+    
+class receiptContents(db.Model, UserMixin):
+    RecieptNo = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    Title = db.Column(db.string(25))
+    Date = db.Column(db.string(7))
+    Total = db.Column(db.string(15))
+    PhoneNO = db.Column(db.string(10))
+    Contents = db.column(db.string(100))
+    Purpose = db.column(db.string(50))

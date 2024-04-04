@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OCR </title>
+    <title>OCR</title>
     <style>
         body {
             display: grid;
@@ -19,20 +19,42 @@
             display: flex;
             flex-direction: column;
             height: 100vh; /* Make the container take up the full height of the viewport */
-            align-items: center; /* Center the buttons vertically */
-            justify-content: center; /* Center the buttons horizontally */
+            align-items: center; /* Center the content vertically */
+            justify-content: center; /* Center the content horizontally */
             background-color: #f0f0f0; /* Colored background for visual separation */
             border-left: 2px solid #007bff; /* Colored border for visual separation */
             padding-left: 20px; /* Padding for visual separation */
         }
-        button {
-            margin-top: 10px;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
+
+        .input-container h3 {
+            margin-bottom: 20px; /* Add some space below the heading */
+            color: #333; /* Text color */
+            font-size: 24px; /* Font size */
+        }
+
+        .input-box {
+            margin-bottom: 10px; /* Add some space between input boxes */
+        }
+
+        .input-box input {
+            padding: 5px; /* Padding inside input boxes */
+            height: 40px;
+            width: 250px;
+            border: 1px solid #ccc; /* Border for input boxes */
+            border-radius: 5px; /* Rounded corners for input boxes */
+        }
+
+        .button {
+            margin-top: 20px; /* Add space above the button */
+        }
+
+        .button input {
+            padding: 8px 16px; /* Padding inside the button */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Rounded corners for button */
+            background-color: #007bff; /* Button background color */
+            color: white; /* Button text color */
+            cursor: pointer; /* Change cursor to pointer on hover */
         }
     </style>
 </head>
@@ -41,11 +63,30 @@
         <pre>{{ text }}</pre>
     </div>
     <div class="input-container">
-        <button value="Button 1">Button 1</button>
-        <button value="Button 2">Button 2</button>
-        <button value="Button 3">Button 3</button>
-        <button value="Button 4">Button 4</button>
-        <button value="Submit">Submit</button>
+        <form method="POST">
+            <h3>Modifications</h3>
+            <div class="input-box">
+                <input type="text" name="title" placeholder="{{ extractedData[0]}}" required />
+            </div>
+            <div class="input-box">
+                <input type="text" name="date" placeholder="{{ extractedData[1]}}" required />
+            </div>
+            <div class="input-box">
+                <input type="text" name="total" placeholder="{{ extractedData[2]}}" required />
+            </div>
+            <div class="input-box">
+                <input type="password" name="phoneno" placeholder="{{ extractedData[3]}} no" required />
+            </div>
+            <div class="input-box">
+                <input type="password" name="contents" placeholder="Contents" required style="height: 200px;" />
+            </div>
+            <div class="input-box">
+                <input type="password" name="purpose" placeholder="Purpose" required style="height: 100px;" />
+            </div>            
+            <div class="input-box button">
+                <input type="Submit" name="button" value="SAVE" />
+            </div>
+        </form>
     </div>
 </body>
 </html>

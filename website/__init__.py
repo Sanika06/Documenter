@@ -15,6 +15,8 @@ def createApp():
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
     from .models import register_info
+    from .models import queryAndFeedback
+    from .models import receiptContents
     from .views import views
     from .ocrFunc import ocrFunc
     from .profile import profile
