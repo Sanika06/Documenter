@@ -2,11 +2,14 @@ import os
 import re
 import cv2
 import nltk
+from nltk.corpus import wordnet
 import easyocr
 import langid
 import pytesseract
+from . import db
 from PIL import Image
 from werkzeug.utils import secure_filename
+from .models import receiptContents
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app as app
 import spacy
 from spacy.matcher import Matcher
@@ -26,28 +29,37 @@ ALLOWED_EXTENSIONS = {'.png', '.jpg', '.jpeg'}
 #         images.append(image)
 #     return images
 
+def extract_title(contentFound):
+    nlp = spacy.load("en_core_web_sm")
+    about_doc = nlp(contentFound)
+    matcher = Matcher(nlp.vocab)
+    pattern = [{"POS": "PROPN"}]
+    matcher.add("TITLE", [pattern])
+    matches = matcher(about_doc)
+    title = ""
+    for _, start, end in matches:
+        span = about_doc[start:end]
+        title = span.text
+        print("TITLE: ", title)
+        return title
+
 def extract_date(contentFound):
     date_pattern = re.compile(r'\b(?:\d{4}[-/]\d{1,2}[-/]\d{1,2}|(?:\d{1,2}[-/])?\d{1,2}[-/]\d{2,4}|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*[-\s]\d{1,2}(?:st|nd|rd|th)?(?:,\s+\d{2,4})?|\b(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)\b(?:day)?(?:,?\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))?(?:\s+\d{2,4})?|\d{1,2}:\d{2}\s*(?:a.m.|p.m.)?|\d{1,2}(?:\.\d{2})?\s*(?:a.m.|p.m.|hours)?|(?:\d{1,2}(?:\s*(?:a.m.|p.m.|hours))?|midnight|noon)(?:\s+(?:at\s+)?(?:\d{1,2}:\d{2})?(?:\s*(?:a.m.|p.m.))?)?)\b')
 
-    date = ""
     matches = re.findall(date_pattern, contentFound)
-    print("Date Found: ")
     for match in matches:
         if re.search(r'Date\s?' + re.escape(match), contentFound):
-            print(match)
-            return date
+            # print(match)
+            return match
         else:
             return "NA"
-            # break
 
 def extract_phone_numbers(text):
-    # Define the regular expression pattern to match Indian phone numbers
     pattern = r'\b(?:\d{5}[-.\s]??\d{5}|\d{10})\b'
-
-    # Find all matches in the text
     phone_numbers = re.findall(pattern, text)
-
-    return phone_numbers
+    if(phone_numbers):
+        print("Phone Number: ", phone_numbers[0])
+    return phone_numbers[0] if(phone_numbers) else "NA"
 
 def extract_total(contentFound):
     total_index = contentFound.find('Total')
@@ -58,44 +70,17 @@ def extract_total(contentFound):
             print("Next Value after 'Total':", total_value)
             return total_value
         else:
-            return "NA"
+            return "NA"    
 
-def extract_title(contentFound):
-    nlp = spacy.load("en_core_web_sm")
-    about_doc = nlp(contentFound)
-    matcher = Matcher(nlp.vocab)
-    print("Printing Proper nouns")
-    pattern = [{"POS": "PROPN"}]
-    matcher.add("TITLE", [pattern])
-    matches = matcher(about_doc)
-
-    for _, start, end in matches:
-        span = about_doc[start:end]
-        print("TITLE: ")
-        title = span.text
-        return title
-        # break
-
-
-@ocrFunc.route("/scanning", methods=['GET','POST'])
-def scanning():
-    filename = request.args.get('file_path')
-    extension = os.path.splitext(filename)[1]
-    # print(extension)
-
-    if extension not in ALLOWED_EXTENSIONS:
-        flash('File type not allowed. Please upload a file with one of the following extensions: {}'.format(", ".join(ALLOWED_EXTENSIONS)))
-        return redirect(url_for("views.dashboard"))
-
+def getReceiptInfo(filename):
     contentFound = ""
-    # if filename.lower().endswith('.pdf'):  #PDF needs to be taken care of.
-    #     filename = pdf_to_image(filename)
-        
     reader = easyocr.Reader(['en', 'de', 'fr'])
     result = reader.readtext(filename)
     for detection in result:
         contentFound += detection[1]
         contentFound += " "
+
+    print(contentFound)
 
     title = extract_title(contentFound)
     date = extract_date(contentFound)
@@ -108,7 +93,30 @@ def scanning():
     extractedData.append(total)
     extractedData.append(phone_number)
 
-    language = langid.classify(contentFound)
+    return extractedData
+
+@ocrFunc.route("/scanning", methods=['GET','POST'])
+def scanning():
+    filename = request.args.get('file_path')
+    extension = os.path.splitext(filename)[1]
+
+    if extension not in ALLOWED_EXTENSIONS:
+        flash('File type not allowed. Please upload a file with one of the following extensions: {}'.format(", ".join(ALLOWED_EXTENSIONS)))
+        return redirect(url_for("views.dashboard"))
+
+    # language = langid.classify(contentFound) // contentFound is a list now, FIX THIS
+    # if(language == 'en'):
+    # else:
+        # translatedData = translateData(contentFound)
+        # processData(translatedData)    
+        
     # print("Detected language:", language)
-    return render_template("ocrFunctions.html", text=contentFound)
-# title date total phone number content
+    extractedData = getReceiptInfo(filename)
+    if request.method == "POST":
+        contents = request.form.get('contents')
+        purpose = request.form.get('purpose')
+        newReceipt = receiptContents(Title = extractedData[0], Date = extractedData[1], Total = extractedData[2] ,PhoneNO = extractedData[3] ,Contents = contents, Purpose = purpose)
+        db.session.add(newReceipt)
+        db.session.commit()
+        return redirect(url_for("views.dashboard"))
+    return render_template("ocrFunctions.html", extractedData=extractedData)

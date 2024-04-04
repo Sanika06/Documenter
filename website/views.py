@@ -31,14 +31,13 @@ def dashboard():
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            newPath = (os.path.join(app.config['UPLOAD_FOLDER'], userId))
+            newPath = os.path.join(app.config['UPLOAD_FOLDER'], userId)
+            newPath = os.path.join(newPath, 'org')
             if not os.path.exists(newPath):
                 os.makedirs(newPath)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], userId, filename))
-            return redirect(url_for("ocrFunc.scanning", file_path=os.path.join(app.config['UPLOAD_FOLDER'], userId, filename)))
-        else:
-            flash('Some Error Occurred')
-            return redirect(request.url)
+            file.save(os.path.join(newPath, filename))
+            return redirect(url_for("ocrFunc.scanning", file_path=os.path.join(newPath, filename)))
+    
 
     return render_template("dashboard.html", text = "Welcome " + name + ", Let's Organize Your World !")
 

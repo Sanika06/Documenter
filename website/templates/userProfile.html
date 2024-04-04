@@ -6,27 +6,26 @@
     <title>Document</title>
     <style>
         body {
-           
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background:  #000718;
+            background: #000718;
+            color: white;
+            font-family: Arial, sans-serif;
         }
         .container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 50px;
             padding: 20px;
-            height: 500px;
             background-color: transparent; /* Remove background color */
         }
         .card {
             background: rgb(184, 223, 231);
             border-radius: 10px;
             padding: 20px;
-            /* height: 150px; */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -38,32 +37,68 @@
             height: 150px;
             margin-bottom: 10px;
         }
+        .flash-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+        .flash-messages {
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <img src="{{ url_for('static', filename='images/editPersonalDetails.png') }}" alt="Edit Icon">
-            <h2>Edit Personal Details</h2>
-            
-                <button type="submit">Open</button>
-        </div>
-        <div class="card">
-            <img src="{{ url_for('static', filename='images/docs.jpg') }}" alt="View My Docs Icon">
-            <h2>View My Docs</h2>
-            <button>Open</button>
-        </div>
-        <div class="card">
-            <img src="{{ url_for('static', filename='images/stddocs.jpg') }}" alt="View My Standard Docs Icon">
-            <h2>View Standard Information</h2>
-            <button>Open</button>
-        </div>
-        <div class="card">
-            <img src="{{ url_for('static', filename='images/queryandfeedback.png') }}" alt="Query and Feedback Icon">
-            <h2>Query and Feedback</h2>
-            <button>Open</button>
-        </div>
+    <div class="flash-container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div id="flash-message" class="flash-messages">
+                    <ul>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <script>
+                    setTimeout(function() {
+                        document.getElementById('flash-message').style.display = 'none';
+                    }, 5000); // 5000 milliseconds = 5 seconds
+                </script>
+            {% endif %}
+        {% endwith %}
     </div>
-    
+
+    <form method="post">
+        <div class="container">
+            <div class="card">
+                <img src="{{ url_for('static', filename='images/editPersonalDetails.png') }}" alt="Edit Icon">
+                <h2>Edit Personal Details</h2>
+                <button type="submit" name="action" value="editPersonalDetails">Open</button>
+            </div>
+            
+            <div class="card">
+                <img src="{{ url_for('static', filename='images/docs.jpg') }}" alt="View My Docs Icon">
+                <h2>View My Docs</h2>
+                <button type="submit" name="action" value="viewMyDocs">Open</button>
+            </div>
+            <div class="card">
+                <img src="{{ url_for('static', filename='images/stddocs.jpg') }}" alt="View My Standard Docs Icon">
+                <h2>View Standard Documents</h2>
+                <button type="submit" name="action" value="viewStandardDocs">Open</button>
+            </div>
+            <div class="card">
+                <img src="{{ url_for('static', filename='images/queryandfeedback.png') }}" alt="Query and Feedback Icon">
+                <h2>Query and Feedback</h2>
+                <button type="submit" name="action" value="queryandfeedback">Open</button>
+            </div>
+        </div>
+    </form>
 </body>
 </html>
