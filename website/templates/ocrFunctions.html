@@ -1,120 +1,327 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>OCR</title>
     <style>
-        body {
-            display: grid;
-            grid-template-columns: calc(65% - 10px) calc(35% - 10px);
-            /* Two columns with 10px gap */
-            gap: 20px;
-            padding: 20px;
-        }
-        
-        .text-container {
-            overflow-y: auto;
-            /* Add vertical scrollbar if content exceeds container height */
-            white-space: pre-wrap;
-            /* Display text on new lines if space is not available */
-        }
-        
-        .input-container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            /* Make the container take up the full height of the viewport */
-            align-items: center;
-            /* Center the content vertically */
-            justify-content: center;
-            /* Center the content horizontally */
-            background-color: #f0f0f0;
-            /* Colored background for visual separation */
-            border-left: 2px solid #007bff;
-            /* Colored border for visual separation */
-            padding-left: 20px;
-            /* Padding for visual separation */
-        }
-        
-        .input-container h3 {
-            margin-bottom: 20px;
-            /* Add some space below the heading */
-            color: #333;
-            /* Text color */
-            font-size: 24px;
-            /* Font size */
-        }
-        
-        .input-box {
-            margin-bottom: 10px;
-            /* Add some space between input boxes */
-        }
-        
-        .input-box input {
-            padding: 5px;
-            /* Padding inside input boxes */
-            height: 40px;
-            width: 250px;
-            border: 1px solid #ccc;
-            /* Border for input boxes */
-            border-radius: 5px;
-            /* Rounded corners for input boxes */
-        }
-        
-        .button {
-            margin-top: 20px;
-            /* Add space above the button */
-        }
-        
-        .button input {
-            padding: 8px 16px;
-            /* Padding inside the button */
-            border: none;
-            /* Remove border */
-            border-radius: 5px;
-            /* Rounded corners for button */
-            background-color: #007bff;
-            /* Button background color */
-            color: white;
-            /* Button text color */
-            cursor: pointer;
-            /* Change cursor to pointer on hover */
-        }
-    </style>
-</head>
+      body {
+        display: grid;
+        grid-template-columns: calc(65% - 10px) calc(35% - 10px);
+        /* Two columns with 10px gap */
+        gap: 5px;
+        padding: 5px;
+      }
 
-<body>
+      .text-container {
+        overflow-y: auto;
+        /* Add vertical scrollbar if content exceeds container height */
+        white-space: pre-wrap;
+        /* Display text on new lines if space is not available */
+      }
+
+      .input-container {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        /* Make the container take up the full height of the viewport */
+        align-items: center;
+        /* Center the content vertically */
+        justify-content: center;
+        /* Center the content horizontally */
+        background-color: #f0f0f0;
+        /* Colored background for visual separation */
+        border-left: 2px solid #007bff;
+        /* Colored border for visual separation */
+        padding-left: 20px;
+        /* Padding for visual separation */
+      }
+
+      .input-container h3 {
+        margin-bottom: 20px;
+        /* Add some space below the heading */
+        color: #333;
+        /* Text color */
+        font-size: 24px;
+        /* Font size */
+      }
+
+      .input-box {
+        margin-bottom: 10px;
+        /* Add some space between input boxes */
+      }
+
+      .input-box input {
+        padding: 5px;
+        /* Padding inside input boxes */
+        height: 40px;
+        width: 250px;
+        border: 1px solid #ccc;
+        /* Border for input boxes */
+        border-radius: 5px;
+        /* Rounded corners for input boxes */
+      }
+
+      .button {
+        margin-top: 20px;
+        /* Add space above the button */
+      }
+
+      .button input {
+        padding: 8px 16px;
+        /* Padding inside the button */
+        border: none;
+        /* Remove border */
+        border-radius: 5px;
+        /* Rounded corners for button */
+        background-color: #007bff;
+        /* Button background color */
+        color: white;
+        /* Button text color */
+        cursor: pointer;
+        /* Change cursor to pointer on hover */
+      }
+
+      .invoice-box {
+        max-width: 800px;
+        margin: 9px;
+        padding: 40px;
+        border: 1px solid #eee;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+        font-size: 16px;
+        line-height: 21px;
+        font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+        color: #555;
+      }
+
+      .invoice-box table {
+        width: 100%;
+        line-height: inherit;
+        text-align: left;
+      }
+
+      .invoice-box table td {
+        padding: 0px;
+        vertical-align: top;
+      }
+
+      .invoice-box table tr td:nth-child(2) {
+        text-align: right;
+      }
+
+      .invoice-box table tr.top table td {
+        padding-bottom: 0px;
+      }
+
+      .invoice-box table tr.top table td.title {
+        font-size: 45px;
+        line-height: 0px;
+        color: #333;
+      }
+
+      .invoice-box table tr.information table td {
+        padding-bottom: 40px;
+      }
+
+      .invoice-box table tr.heading td {
+        background: #eee;
+        border-bottom: 1px solid #ddd;
+        font-weight: bold;
+      }
+
+      .invoice-box table tr.details td {
+        padding-bottom: 20px;
+      }
+
+      .invoice-box table tr.item td {
+        border-bottom: 1px solid #eee;
+      }
+
+      .invoice-box table tr.item.last td {
+        border-bottom: none;
+      }
+
+      .invoice-box table tr.total td:nth-child(2) {
+        border-top: 2px solid #eee;
+        font-weight: bold;
+      }
+
+      @media only screen and (max-width: 600px) {
+        .invoice-box table tr.top table td {
+          width: 100%;
+          display: block;
+          text-align: center;
+        }
+        .invoice-box table tr.information table td {
+          width: 100%;
+          display: block;
+          text-align: center;
+        }
+      }
+      /** RTL **/
+
+      .invoice-box.rtl {
+        direction: rtl;
+        font-family: Tahoma, "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+      }
+
+      .invoice-box.rtl table {
+        text-align: right;
+      }
+
+      .invoice-box.rtl table tr td:nth-child(2) {
+        text-align: left;
+      }
+    </style>
+  </head>
+
+  <body>
     <div class="text-container">
-        <pre>{{ text }}</pre>
+      <!-- <pre>{{ text }}</pre> -->
+      <div class="invoice-box">
+        <table cellpadding="0" cellspacing="0">
+          <tr class="top">
+            <td colspan="2">
+              <table>
+                <tr>
+                  <td>
+                    <img
+                      src="{{ url_for('static', filename='images/logo1.png') }}"
+                      alt="Brand Logo"
+                      style="width: 100%; height: 80px; max-width: 700px"
+                    />
+                  </td>
+                  <td class="title">
+                    <h3>Invoice</h3>
+                  </td>
+                  <!-- <td>
+                                    Invoice #: 123<br /> Created: January 1, 2023<br /> Due: February 1, 2023
+                                </td> -->
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              Invoice #: 123<br />
+              Title: {{extractedData[0]}} <br />Recipt date: {{extractedData[1]}}<br />
+              Phone Number: {{extractedData[3]}}<br />
+              Created at: April 4, 2024 <br />
+              <!-- Due: February 1, 2023 -->
+            </td>
+          </tr>
+          <!-- <tr class=" information">
+                    <td colspan="2">
+                        <table>
+                            <tr>
+                                <td>
+                      Sparksuite, Inc.<br />
+                      12345 Sunny Road<br />
+                      Sunnyville, CA 12345
+                                </td>
+    
+                                <td>
+                                    Acme Corp.<br /> John Doe<br /> john@example.com
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr> -->
+
+          <!-- <tr class="heading">
+              <td>Payment Method</td>
+    
+              <td>Check #</td>
+            </tr>
+    
+            <tr class="details">
+              <td>Check</td>
+    
+              <td>1000</td>
+            </tr> -->
+
+          <tr class="heading">
+            <td>Item</td>
+
+            <td>Price</td>
+          </tr>
+
+          <tr class="item">
+            <td>Website design</td>
+
+            <td>$300.00</td>
+          </tr>
+
+          <tr class="item">
+            <td>Hosting (3 months)</td>
+
+            <td>$75.00</td>
+          </tr>
+
+          <tr class="item last">
+            <td>Domain name (1 year)</td>
+
+            <td>$10.00</td>
+          </tr>
+
+          <tr class="total">
+            <td></td>
+
+            <td>Total: {{extractedData[2]}}</td>
+          </tr>
+        </table>
+      </div>
     </div>
     <div class="input-container">
-        <form method="POST">
-            <h3>Modifications</h3>
-            <div class="input-box">
-                <input type="text" name="title" placeholder="{{extractedData[0]}}" value="{{extractedData[0]}}" required />
-            </div>
-            <div class="input-box">
-                <input type="text" name="date" placeholder="{{extractedData[1]}}" value="{{extractedData[1]}}" required />
-            </div>
-            <div class="input-box">
-                <input type="text" name="total" placeholder="{{extractedData[2]}}" value="{{extractedData[2]}}" required />
-            </div>
-            <div class="input-box">
-                <input type="text" name="phoneno" placeholder="{{extractedData[3]}}" value="{{extractedData[3]}}" required />
-            </div>
-            <div class="input-box">
-                <input type="text" name="contents" placeholder="Contents" style="height: 200px" />
-            </div>
-            <div class="input-box">
-                <input type="text" name="purpose" placeholder="Purpose" required style="height: 100px" />
-            </div>
-            <div class="input-box button">
-                <input type="Submit" name="button" value="SAVE" />
-            </div>
-        </form>
+      <form method="POST">
+        <h3>Modifications</h3>
+        <div class="input-box">
+          <input
+            type="text"
+            name="title"
+            placeholder="{{extractedData[0]}}"
+            value="{{extractedData[0]}}"
+            required
+          />
+        </div>
+        <div class="input-box">
+          <input
+            type="text"
+            name="date"
+            placeholder="{{extractedData[1]}}"
+            value="{{extractedData[1]}}"
+            required
+          />
+        </div>
+        <div class="input-box">
+          <input
+            type="text"
+            name="total"
+            placeholder="{{extractedData[2]}}"
+            value="{{extractedData[2]}}"
+            required
+          />
+        </div>
+        <div class="input-box">
+          <input
+            type="text"
+            name="phoneno"
+            placeholder="{{extractedData[3]}}"
+            value="{{extractedData[3]}}"
+            required
+          />
+        </div>
+        <div class="input-box">
+          <input type="text" name="contents" placeholder="Contents" style="height: 200px" />
+        </div>
+        <div class="input-box">
+          <input type="text" name="purpose" placeholder="Purpose" required style="height: 100px" />
+        </div>
+        <div class="input-box button">
+          <input type="Submit" name="button" value="SAVE" />
+        </div>
+      </form>
     </div>
-</body>
-
+  </body>
 </html>

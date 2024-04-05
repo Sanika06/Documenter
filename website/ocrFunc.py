@@ -10,11 +10,12 @@ from . import db
 from PIL import Image
 from werkzeug.utils import secure_filename
 from .models import receiptContents
-from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app as app
+from flask import Blueprint, render_template, request, redirect, send_file, url_for, flash, current_app as app
 import spacy
 from spacy.matcher import Matcher
 from datetime import datetime
-
+from io import BytesIO
+from reportlab.pdfgen import canvas
 
 ocrFunc = Blueprint('ocrFunc', __name__)
 ALLOWED_EXTENSIONS = {'.png', '.jpg', '.jpeg'}
@@ -62,15 +63,13 @@ def extract_phone_numbers(text):
     return phone_numbers[0] if(phone_numbers) else "NA"
 
 def extract_total(contentFound):
-    total_index = contentFound.find('Total')
-    if total_index != -1:
-        total_match = re.search(r'\d+\.\d+', contentFound[total_index:])
-        if total_match:
-            total_value = total_match.group()
-            print("Next Value after 'Total':", total_value)
-            return total_value
-        else:
-            return "NA"    
+    total_match = re.search(r'(?:Total|Grand\sTotal|Amount|Sub\sTotal|Net\sTotal)\W*?(\d+(\.\d+)?)', contentFound)
+    if total_match:
+        total_value = total_match.group(1)
+        print("Value after 'Total':", total_value)
+        return total_value
+    else:
+        return "NA"
 
 def getReceiptInfo(filename):
     contentFound = ""
@@ -95,6 +94,26 @@ def getReceiptInfo(filename):
 
     return extractedData
 
+def generate_standard_receipt():
+	buffer = BytesIO()
+	p = canvas.Canvas(buffer)
+
+	# Create a PDF document
+	# p.drawString(100, 750, "Receipt")
+
+	y = 700
+	for book in user_data:
+		p.drawString(100, y, f"Title: {book['title']}")
+		p.drawString(100, y - 20, f"Author: {book['author']}")
+		p.drawString(100, y - 40, f"Year: {book['publication_year']}")
+		y -= 60
+
+	p.showPage()
+	p.save()
+
+	buffer.seek(0)
+	return buffer
+
 @ocrFunc.route("/scanning", methods=['GET','POST'])
 def scanning():
     filename = request.args.get('file_path')
@@ -118,5 +137,8 @@ def scanning():
         newReceipt = receiptContents(Title = extractedData[0], Date = extractedData[1], Total = extractedData[2] ,PhoneNO = extractedData[3] ,Contents = contents, Purpose = purpose)
         db.session.add(newReceipt)
         db.session.commit()
+        pdf_file = generate_standard_receipt()
+        return send_file(pdf_file, as_attachment=True, download_name='book_catalog.pdf')
+
         return redirect(url_for("views.dashboard"))
     return render_template("ocrFunctions.html", extractedData=extractedData)
