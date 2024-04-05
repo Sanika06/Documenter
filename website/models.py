@@ -16,9 +16,10 @@ class queryAndFeedback(db.Model, UserMixin):
     
 class receiptContents(db.Model, UserMixin):
     RecieptNo = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    Email = db.Column(db.String(25))
     Title = db.Column(db.String(25))
     Date = db.Column(db.String(7))
     Total = db.Column(db.String(15))
     PhoneNO = db.Column(db.String(10))
-    Contents = db.Column(db.String(100))  # Add Contents column
+    Contents = db.Column(db.String(100))  
     Purpose = db.Column(db.String(50))

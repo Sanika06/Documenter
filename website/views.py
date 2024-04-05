@@ -2,7 +2,7 @@ import re
 import os
 import cv2
 from .ocrFunc import scanning
-from .models import register_info
+from .models import register_info, receiptContents
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import redirect, url_for, Blueprint, render_template, request, flash, current_app as app, session
@@ -14,6 +14,30 @@ ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@views.route("/viewMyInfo", methods=['GET', 'POST'])
+
+def viewMyInfo():
+    if request.method == 'POST':
+        userId = session.get('user-id') 
+        option = request.form.get("option")
+
+        if option == "id":
+            id = request.form.get("input")
+            records = receiptContents.query.filter_by(Email=userId, RecieptNo=id).all()
+        elif option == "purpose":
+            purpose = request.form.get("input")
+            records = receiptContents.query.filter_by(Email=userId, Purpose=purpose).all()
+        else:
+            records = receiptContents.query.filter_by(Email=userId).all()
+        
+        if not records:
+            flash("No Data Found")
+            return redirect(url_for("views.viewMyInfo"))
+        else:
+            return render_template("viewMyInfo.html", records=records)
+
+    return render_template("viewMyInfo.html")
 
 @views.route("/dashboard", methods=['GET', 'POST'])
 def dashboard():
@@ -27,16 +51,20 @@ def dashboard():
         # print(name)
    
     if request.method == 'POST':
-        file = request.files['fileToUpload']
-
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            newPath = os.path.join(app.config['UPLOAD_FOLDER'], userId)
-            newPath = os.path.join(newPath, 'org')
-            if not os.path.exists(newPath):
-                os.makedirs(newPath)
-            file.save(os.path.join(newPath, filename))
-            return redirect(url_for("ocrFunc.scanning", file_path=os.path.join(newPath, filename)))
+        if 'action' in request.form:
+            action = request.form['action']
+            if action == 'viewMyInfo':
+                return redirect(url_for("views.viewMyInfo"))
+        else:
+            file = request.files['fileToUpload']
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                newPath = os.path.join(app.config['UPLOAD_FOLDER'], userId)
+                newPath = os.path.join(newPath, 'org')
+                if not os.path.exists(newPath):
+                    os.makedirs(newPath)
+                file.save(os.path.join(newPath, filename))
+                return redirect(url_for("ocrFunc.scanning", file_path=os.path.join(newPath, filename)))
     
 
     return render_template("dashboard.html", text = "Welcome " + name + ", Let's Organize Your World !")

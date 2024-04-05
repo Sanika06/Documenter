@@ -10,10 +10,15 @@ from . import db
 from PIL import Image
 from werkzeug.utils import secure_filename
 from .models import receiptContents
-from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app as app
+from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app as app, session
 import spacy
 from spacy.matcher import Matcher
 from datetime import datetime
+from sqlalchemy import desc
+from langdetect import detect
+from translate import Translator
+from googletrans import Translator
+
 
 
 ocrFunc = Blueprint('ocrFunc', __name__)
@@ -74,13 +79,25 @@ def extract_total(contentFound):
 
 def getReceiptInfo(filename):
     contentFound = ""
+    contentFoundList = []
     reader = easyocr.Reader(['en', 'de', 'fr'])
     result = reader.readtext(filename)
     for detection in result:
-        contentFound += detection[1]
-        contentFound += " "
+        contentFoundList.append(detection[1])
+        # contentFound += " "
 
-    print(contentFound)
+    # print(contentFoundList)
+
+    # language = detect(contentFoundList)
+
+    # print(language)
+
+    translator = Translator()
+    translated_list = [translator.translate(text, dest='en').text for text in contentFoundList]
+    contentFound = " ".join(translated_list)
+
+
+    # print(contentFound)
 
     title = extract_title(contentFound)
     date = extract_date(contentFound)
@@ -104,19 +121,29 @@ def scanning():
         flash('File type not allowed. Please upload a file with one of the following extensions: {}'.format(", ".join(ALLOWED_EXTENSIONS)))
         return redirect(url_for("views.dashboard"))
 
-    # language = langid.classify(contentFound) // contentFound is a list now, FIX THIS
-    # if(language == 'en'):
-    # else:
+    extractedData = getReceiptInfo(filename)
+    
         # translatedData = translateData(contentFound)
         # processData(translatedData)    
         
     # print("Detected language:", language)
-    extractedData = getReceiptInfo(filename)
+
+    last_receipt = receiptContents.query.order_by(desc(receiptContents.RecieptNo)).first()
+    current_receipt_no = last_receipt.RecieptNo if last_receipt else 0
+    current_receipt_no += 1
+    print(current_receipt_no)
     if request.method == "POST":
+        email = session.get('user-id')
         contents = request.form.get('contents')
         purpose = request.form.get('purpose')
-        newReceipt = receiptContents(Title = extractedData[0], Date = extractedData[1], Total = extractedData[2] ,PhoneNO = extractedData[3] ,Contents = contents, Purpose = purpose)
+
+        Title = request.form.get('title')
+        Date = request.form.get('date')
+        Total = request.form.get('total')
+        Phone = request.form.get('phoneno')
+
+        newReceipt = receiptContents(Title = Title, Email= email, Date = Date, Total = Total ,PhoneNO = Phone ,Contents = contents, Purpose = purpose)
         db.session.add(newReceipt)
         db.session.commit()
         return redirect(url_for("views.dashboard"))
-    return render_template("ocrFunctions.html", extractedData=extractedData)
+    return render_template("ocrFunctions.html", extractedData=extractedData, no = current_receipt_no)
