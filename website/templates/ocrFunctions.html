@@ -157,6 +157,51 @@
           display: block;
           text-align: center;
         }
+        .button input {
+          padding: 8px 16px;
+          /* Padding inside the button */
+          border: none;
+          /* Remove border */
+          border-radius: 5px;
+          /* Rounded corners for button */
+          background-color: #007bff;
+          /* Button background color */
+          color: white;
+          /* Button text color */
+          cursor: pointer;
+          /* Change cursor to pointer on hover */
+          form {
+            width: 50%;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+          }
+          .input-box {
+            margin-bottom: 15px;
+          }
+          label {
+            display: inline-block;
+            width: 120px;
+            text-align: right;
+            margin-right: 15px;
+          }
+          input[type="text"] {
+            width: 300px;
+            padding: 5px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+          }
+          input[type="submit"] {
+            padding: 5px 15px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+          }
+        }
       }
       /** RTL **/
 
@@ -204,7 +249,7 @@
           <tr>
             <td></td>
             <td>
-              Invoice #: 123<br />
+              Invoice #: {{no}}<br />
               Title: {{extractedData[0]}} <br />Recipt date: {{extractedData[1]}}<br />
               Phone Number: {{extractedData[3]}}<br />
               Created at: April 4, 2024 <br />
@@ -275,48 +320,74 @@
     </div>
     <div class="input-container">
       <form method="POST">
+        <h4>Receipt no: {{ no }}</h4>
         <h3>Modifications</h3>
+        <h5>(You may modify as per your needs before saving the information)</h5>
         <div class="input-box">
+          <label for="title">Title:</label>
           <input
             type="text"
+            id="title"
             name="title"
-            placeholder="{{extractedData[0]}}"
-            value="{{extractedData[0]}}"
+            placeholder="{{ extractedData[0] }}"
+            value="{{ extractedData[0] }}"
             required
           />
         </div>
         <div class="input-box">
+          <label for="date">Date:</label>
           <input
             type="text"
+            id="date"
             name="date"
-            placeholder="{{extractedData[1]}}"
-            value="{{extractedData[1]}}"
+            placeholder="{{ extractedData[1] }}"
+            value="{{ extractedData[1] }}"
             required
           />
         </div>
         <div class="input-box">
+          <label for="total">Total:</label>
           <input
             type="text"
+            id="total"
             name="total"
-            placeholder="{{extractedData[2]}}"
-            value="{{extractedData[2]}}"
+            placeholder="{{ extractedData[2] }}"
+            value="{{ extractedData[2] }}"
             required
           />
         </div>
         <div class="input-box">
+          <label for="phoneno">Contact:</label>
           <input
             type="text"
+            id="phoneno"
             name="phoneno"
-            placeholder="{{extractedData[3]}}"
-            value="{{extractedData[3]}}"
+            placeholder="{{ extractedData[3] }}"
+            value="{{ extractedData[3] }}"
             required
           />
         </div>
         <div class="input-box">
-          <input type="text" name="contents" placeholder="Contents" style="height: 200px" />
+          <label for="contents">Contents:</label>
+          <textarea
+            id="contents"
+            name="contents"
+            placeholder="Contents"
+            rows="10"
+            cols="100"
+            style="height: 200px"
+          ></textarea>
         </div>
         <div class="input-box">
-          <input type="text" name="purpose" placeholder="Purpose" required style="height: 100px" />
+          <label for="purpose">Purpose:</label>
+          <input
+            type="text"
+            id="purpose"
+            name="purpose"
+            placeholder="Purpose"
+            required
+            style="height: 100px"
+          />
         </div>
         <div class="input-box button">
           <input type="Submit" name="button" value="SAVE" />

@@ -1,0 +1,74 @@
+<html>
+<head>
+    <title>Retrieve Information</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#option').change(function() {
+                if ($(this).val() === 'Show ALL') {
+                    $('#input').removeAttr('required');
+                } else {
+                    $('#input').attr('required', 'required');
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Retrieve Information</h1>
+    <form method="POST">
+        <label for="option">Select Option:</label>
+        <select id="option" name="option">
+            <option value="id">ID</option>
+            <option value="purpose">Purpose</option>
+            <option value="Show ALL">Show All</option>
+        </select>
+        <br><br>
+        <label for="input">Enter ID or Purpose:</label>
+        <input type="text" id="input" name="input" required>
+        <br><br>
+        <input type="submit" value="Retrieve">
+    </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}" style="color:black">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% if records %}
+        <h2>Records</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Receipt Number</th>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Total</th>
+                    <th>Phone Number</th>
+                    <th>Contents</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr>
+                    <td>{{ record.Email }}</td>
+                    <td>{{ record.RecieptNo }}</td>
+                    <td>{{ record.Title }}</td>
+                    <td>{{ record.Date }}</td>
+                    <td>{{ record.Total }}</td>
+                    <td>{{ record.PhoneNO }}</td>
+                    <td>{{ record.Contents }}</td>
+                    <td>{{ record.Purpose }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </body>
+    </html>

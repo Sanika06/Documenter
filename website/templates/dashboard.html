@@ -60,7 +60,7 @@
             border-radius: 5px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
         }
-    </style>
+        </style>
 </head>
 <body>
     <div class="navbar">
@@ -68,9 +68,12 @@
             <i class="fas fa-user"></i> 
         </a>
         <span>{{ text }}</span> 
-        <div><a href="{{ url_for('views.logout') }}">Logout</a> </div> <!-- Logout button on the right -->
+        <div><a href="{{ url_for('views.logout') }}">Logout</a> </div> 
     </div>
     
+    <form method="post">
+    <button type="submit" name="action" value ="viewMyInfo">View My Info</button>
+    </form>
     <div class="container">
         <h2>Upload a File</h2>
         <form method="post" enctype="multipart/form-data">
@@ -81,14 +84,15 @@
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
-                <div class="alert alert-{{ category }}" style="color:black">
-                    {{ message }}
-                </div>
+            <div class="alert alert-{{ category }}" style="color:black">
+                {{ message }}
+            </div>
             {% endfor %}
-        {% endif %}
-        {% endwith %}
+            {% endif %}
+            {% endwith %}
     
     </div>
+    <p></p><p></p>
     <div class="extension-container">
         Available extensions: jpeg, jpg, png
     </div>
