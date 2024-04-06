@@ -146,6 +146,10 @@
         z-index: 10;
       }
 
+      #navbar i {
+        font-size: 24px;
+        margin-left: 20px;
+      }
       .nav-wrapper {
         margin: auto;
         text-align: center;
@@ -169,6 +173,10 @@
         height: 60px;
         letter-spacing: 1px;
         text-transform: uppercase;
+      }
+
+      .logo i {
+        margin-left: 20px;
       }
       /* @media (max-width: 768px) {
         .logo {
@@ -511,6 +519,13 @@
           <a href="{{ url_for('profile.profilePage') }}">
             <i class="fas fa-user"></i>
           </a>
+          <a href="#">
+            <form method="post">
+              <button type="submit" class="btn" name="action" value="viewMyInfo">
+                View My Info
+              </button>
+            </form>
+          </a>
         </div>
         <span>{{ text }}</span>
         <ul id="menu">
@@ -526,7 +541,7 @@
           <header>
             <h4>Select File here</h4>
           </header>
-          <p>Files Supported: JPEG, JPG, PNG</p>
+          <p>File Type Supported: JPEG, JPG, PNG</p>
           <form method="post" enctype="multipart/form-data">
             <input
               type="file"
@@ -540,9 +555,6 @@
         </div>
       </div>
       <div class="alert alert-{{ category }}" style="color: black">{{ message }}</div>
-      <form method="post">
-        <button type="submit" class="btn" name="action" value="viewMyInfo">View My Info</button>
-      </form>
     </div>
 
     <script>
