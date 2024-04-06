@@ -5,22 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>File Names Table</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #d2d7d8;
+            margin: 0;
+            padding: 0;
+        }
+        h2 {
+            text-align: center;
+            margin-top: 20px;
+        }
         table {
-            width: 100%;
+            width: 80%;
+            margin: 20px auto;
             border-collapse: collapse;
+            border-spacing: 0;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
             text-align: left;
         }
         th {
+            background-color: #333;
+            color: #fff;
+        }
+        tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+        tr:hover {
+            background-color: #e6e6e6;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
     </style>
+    
+    
 </head>
 <body>
-    <h2>File Names Table</h2>
+    <h2>Original Documents</h2>
     <table>
         <thead>
             <tr>

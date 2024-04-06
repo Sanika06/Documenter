@@ -9,7 +9,7 @@ from flask import redirect, url_for, Blueprint, render_template, request, flash,
 
 views = Blueprint('views', __name__)
 
-ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
+ALLOWED_EXTENSIONS = { 'png', 'jpg', 'jpeg'}
 
 def allowed_file(filename):
     return '.' in filename and \

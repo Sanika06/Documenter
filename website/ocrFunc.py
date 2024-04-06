@@ -20,7 +20,7 @@ import pdfkit
 from googletrans import Translator
 
 from io import BytesIO
-from reportlab.pdfgen import canvas
+# from reportlab.pdfgen import canvas
 
 ocrFunc = Blueprint('ocrFunc', __name__)
 ALLOWED_EXTENSIONS = {'.png', '.jpg', '.jpeg'}
@@ -110,7 +110,7 @@ def getReceiptInfo(filename):
     contentFound = " ".join(translated_list)
 
 
-    # print(contentFound)
+    print(contentFound)
 
     title = extract_title(contentFound)
     date = extract_date(contentFound)
@@ -128,7 +128,7 @@ def getReceiptInfo(filename):
 def generate_and_save_pdf(current_receipt_no, email, Title, Date, Total, Phone, item_names, prices):
     filename = f"Receipt-{current_receipt_no}.pdf"
 
-    html = render_template("stdReceipt.html", receipt_no = current_receipt_no, title = Title, date = Date, total = Total, phone_no = Phone, item_names = item_names, prices = prices)
+    html = render_template("stdReceipt.html", src = "{{ url_for('static', filename='images/logo1.png') }}" ,receipt_no = current_receipt_no, title = Title, date = Date, total = Total, phone_no = Phone, item_names = item_names, prices = prices)
     pdf = pdfkit.from_string(html, options={"enable-local-file-access": ""})
 
     # Save the PDF file to the specified folder

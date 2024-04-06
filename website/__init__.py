@@ -6,7 +6,7 @@ db = SQLAlchemy()
 DB_NAME = "Documenter.db"
 
 UPLOAD_FOLDER = 'uploads'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 def createApp():
     app = Flask(__name__)
