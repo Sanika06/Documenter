@@ -1,10 +1,249 @@
 <html>
+
 <head>
-    <title>Retrieve Information</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up Form</title>
+    <link rel="stylesheet" href="https://codepen.io/gymratpacks/pen/VKzBEp#0">
+    <link href='https://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
+    <!-- <link rel="stylesheet" href="css/main.css"> -->
+    <style>
+        *,
+        *:before,
+        *:after {
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: #384047;
+        }
+
+        form {
+            max-width: 1000px;
+            margin: 10px auto;
+            padding: 10px 20px;
+            background: #f6f8fd;
+            border-radius: 8px;
+        }
+
+        h1 {
+            margin: 0 0 30px 0;
+            text-align: center;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="date"],
+        input[type="datetime"],
+        input[type="email"],
+        input[type="number"],
+        input[type="search"],
+        input[type="tel"],
+        input[type="time"],
+        input[type="url"],
+        textarea,
+        select {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            font-size: 16px;
+            height: auto;
+            margin: 0;
+            outline: 0;
+            padding: 15px;
+            width: 100%;
+            background-color: #ffffff;
+            color: #8a97a0;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
+            margin-bottom: 30px;
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin: 0 4px 8px 0;
+        }
+
+        select {
+            padding: 6px;
+            height: 32px;
+            border-radius: 2px;
+        }
+
+        input[type="submit"] {
+            padding: 19px 39px 18px 39px;
+            color: #000;
+            background-color: #b3c5f5;
+            font-size: 18px;
+            text-align: center;
+            font-style: normal;
+            border-radius: 5px;
+            width: 100%;
+            border: 1px solid #759cff;
+            border-width: 1px 1px 3px;
+            box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1) inset;
+            margin-bottom: 10px;
+        }
+
+        fieldset {
+            margin-bottom: 30px;
+            border: none;
+        }
+
+        legend {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        label.light {
+            font-weight: 300;
+            display: inline;
+        }
+
+        .number {
+            background-color: #5fcf80;
+            color: #fff;
+            height: 30px;
+            width: 30px;
+            display: inline-block;
+            font-size: 0.8em;
+            margin-right: 4px;
+            line-height: 30px;
+            text-align: center;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+            border-radius: 100%;
+        }
+
+        @media screen and (min-width: 480px) {
+
+            form {
+                max-width: 480px;
+            }
+
+        }
+
+        /* Table */
+
+        .container {
+            max-width: 2000px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        h2 {
+            font-size: 26px;
+            margin: 20px 0;
+            text-align: center;
+
+            small {
+                font-size: 0.5em;
+            }
+        }
+
+        .responsive-table {
+            li {
+                border-radius: 3px;
+                padding: 25px 30px;
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 25px;
+            }
+
+            .table-header {
+                background-color: #2d7ae5;
+                font-size: 15px;
+                text-transform: uppercase;
+                letter-spacing: 0.03em;
+            }
+
+            .table-row {
+                background-color: #f6f8fd;
+                box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
+            }
+
+            .col-1 {
+                flex-basis: 6%;
+                /* Receipt number */
+            }
+
+            .col-2 {
+                flex-basis: 18%;
+                /* Email */
+            }
+
+            .col-3 {
+                flex-basis: 12%;
+                /* Title */
+            }
+
+            .col-4 {
+                flex-basis: 7%;
+                /* Date */
+            }
+
+            .col-5 {
+                flex-basis: 6%;
+                /* Total */
+            }
+
+            .col-6 {
+                flex-basis: 12%;
+                /* Phone Number */
+            }
+
+            .col-7 {
+                flex-basis: 30%;
+                /* Contents */
+            }
+
+            .col-8 {
+                flex-basis: 15%;
+                /* Purpose */
+            }
+
+            @media all and (max-width: 767px) {
+                .table-header {
+                    display: none;
+                }
+
+                /* .table-row {
+            } */
+                li {
+                    display: block;
+                }
+
+                .col {
+                    flex-basis: 100%;
+                }
+
+                .col {
+                    display: flex;
+                    padding: 10px 0;
+
+                    &:before {
+                        color: #6c7a89;
+                        padding-right: 10px;
+                        content: attr(data-label);
+                        flex-basis: 50%;
+                        text-align: right;
+                    }
+                }
+            }
+        }
+    </style>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#option').change(function() {
+        $(document).ready(function () {
+            $('#option').change(function () {
                 if ($(this).val() === 'Show ALL') {
                     $('#input').removeAttr('required');
                 } else {
@@ -14,61 +253,71 @@
         });
     </script>
 </head>
-<body>
-    <h1>Retrieve Information</h1>
-    <form method="POST">
-        <label for="option">Select Option:</label>
-        <select id="option" name="option">
-            <option value="id">ID</option>
-            <option value="purpose">Purpose</option>
-            <option value="Show ALL">Show All</option>
-        </select>
-        <br><br>
-        <label for="input">Enter ID or Purpose:</label>
-        <input type="text" id="input" name="input" required>
-        <br><br>
-        <input type="submit" value="Retrieve">
-    </form>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-        <div class="alert alert-{{ category }}" style="color:black">
-            {{ message }}
-        </div>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
 
-        {% if records %}
+<body>
+    <div class="row">
+        <div class="col-md-12">
+            <form method="post">
+                <h1> Retrieve Information </h1>
+                <!-- <legend><span class="number">2</span> Your Profile</legend> -->
+
+                <label for="Query">Query Using:</label>
+                <select id="option" name="option">
+                    <option value="id">ID</option>
+                    <option value="purpose">Purpose</option>
+                    <option value="Show ALL">Show All</option>
+                </select>
+
+                <label for="ID or Purpose">Enter ID or Purpose: </label>
+                <input type="text" id="input" name="input" required></input>
+
+                <input type="submit" value="Retrieve">
+            </form>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" style="color:black">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+        </div>
+    </div>
+
+    {% if records %}
+    <div class="container">
+        <br />
         <h2>Records</h2>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Email</th>
-                    <th>Receipt Number</th>
-                    <th>Title</th>
-                    <th>Date</th>
-                    <th>Total</th>
-                    <th>Phone Number</th>
-                    <th>Contents</th>
-                    <th>Purpose</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for record in records %}
-                <tr>
-                    <td>{{ record.Email }}</td>
-                    <td>{{ record.RecieptNo }}</td>
-                    <td>{{ record.Title }}</td>
-                    <td>{{ record.Date }}</td>
-                    <td>{{ record.Total }}</td>
-                    <td>{{ record.PhoneNO }}</td>
-                    <td>{{ record.Contents }}</td>
-                    <td>{{ record.Purpose }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% endif %}
-    </body>
-    </html>
+        <br />
+        <ul class="responsive-table">
+            <li class="table-header">
+                <div class="col col-1">Receipt Number</div>
+                <div class="col col-2">Email</div>
+                <div class="col col-3">Title</div>
+                <div class="col col-4">Date</div>
+                <div class="col col-5">Total</div>
+                <div class="col col-6">Phone number</div>
+                <div class="col col-7">Content</div>
+                <div class="col col-8">Purpose</div>
+            </li>
+            {% for record in records %}
+            <li class="table-row">
+                <div class="col col-1" data-label="ReceiptNo">{{ record.RecieptNo }}</div>
+                <div class="col col-2" data-label="Email">{{ record.Email }}</div>
+                <div class="col col-3" data-label="Title">{{ record.Title }}</div>
+                <div class="col col-4" data-label="Date">{{ record.Date }}</div>
+                <div class="col col-5" data-label="Total">{{ record.Total }}</div>
+                <div class="col col-6" data-label="PhoneNo">{{ record.PhoneNO }}</div>
+                <div class="col col-7" data-label="Content">{{ record.Contents }}</div>
+                <div class="col col-8" data-label="Purpose">{{ record.Purpose }}</div>
+            </li>
+            {% endfor %}
+
+        </ul>
+    </div>
+    {% endif %}
+</body>
+
+</html>

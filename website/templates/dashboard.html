@@ -1,100 +1,574 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>File Upload</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
     <style>
-        span{
-            text-align: left;
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background-image: url("{{ url_for('static', filename='images/bgimage.jpeg') }}");
+        background-color: rgba(255, 255, 255, 1); /* Adjust the opacity value (0 to 1) */
+      }
+      span {
+        text-align: left;
+      }
+      /* body {
+        background-image: url("{{ url_for('static', filename='images/bgimage.jpeg') }}");
+        background-size: cover;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Prevent scrolling 
+      } */
+      .navbar {
+        width: 100%;
+        padding: 10px 20px;
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(100, 64, 64, 0.3);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .navbar i {
+        font-size: 24px;
+        margin-left: 20px;
+      }
+
+      .container {
+        height: 100vh;
+        width: 100%;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        /* background-color: #fcfcfc; */
+      }
+
+      .card {
+        border-radius: 10px;
+        box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3);
+        width: 600px;
+        height: 260px;
+        background-color: #ffffff;
+        padding: 10px 30px 40px;
+      }
+
+      .card h3 {
+        font-size: 22px;
+        font-weight: 600;
+      }
+
+      .drop_box {
+        margin: 10px 0;
+        padding: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        border: 3px dotted #a3a3a3;
+        border-radius: 5px;
+      }
+
+      .drop_box h4 {
+        font-size: 16px;
+        font-weight: 400;
+        color: #2e2e2e;
+      }
+
+      .drop_box p {
+        margin-top: 10px;
+        margin-bottom: 20px;
+        font-size: 12px;
+        color: #a3a3a3;
+      }
+
+      .btn {
+        text-decoration: none;
+        background-color: #005af0;
+        color: #ffffff;
+        padding: 10px 20px;
+        border: none;
+        outline: none;
+        transition: 0.3s;
+      }
+
+      .btn:hover {
+        text-decoration: none;
+        background-color: #ffffff;
+        color: #005af0;
+        padding: 10px 20px;
+        border: none;
+        outline: 1px solid #010101;
+      }
+      /* form {
+        text-align: center;
+      } */
+      /* div {
+        font-size: 16px;
+        margin-right: 20px;
+      } */
+      /* .extension-container {
+        position: fixed;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(244, 246, 247, 0.8);
+        padding: 5px 10px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+      } */
+
+      /* NAVBAR */
+
+      /* NAVBAR */
+      #navbar {
+        background: white;
+        color: rgb(13, 26, 38);
+        position: fixed;
+        top: 0;
+        height: 60px;
+        line-height: 60px;
+        width: 100vw;
+        z-index: 10;
+      }
+
+      .nav-wrapper {
+        margin: auto;
+        text-align: center;
+        width: 70%;
+      }
+      @media (max-width: 768px) {
+        .nav-wrapper {
+          width: 90%;
         }
-        body {
-            background-image: url("{{ url_for('static', filename='images/bgimage.jpeg') }}");
-            background-size: cover;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            padding: 0;
-            overflow: hidden; /* Prevent scrolling */
+      }
+      @media (max-width: 638px) {
+        .nav-wrapper {
+          width: 100%;
         }
-        .navbar {
-            width: 100%;
-            padding: 10px 20px;
-            background-color:  rgba(255, 255, 255, 0.8);
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(100, 64, 64, 0.3);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+      }
+
+      .logo {
+        float: left;
+        margin-left: 28px;
+        font-size: 1.5em;
+        height: 60px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+      /* @media (max-width: 768px) {
+        .logo {
+          /*       margin-left: 5px; 
         }
-        .navbar i {
-            font-size: 24px;
-            margin-left: 20px;
+      } */
+
+      #navbar ul {
+        /* display: inline-block; */
+        float: right;
+        list-style: none;
+        /* margin-right: 14px; */
+        margin-top: -2px;
+        text-align: right;
+        transition: transform 0.5s ease-out;
+        -webkit-transition: transform 0.5s ease-out;
+      }
+      @media (max-width: 640px) {
+        #navbar ul {
+          display: none;
         }
-        .container {
-            margin-top: 300px; /* Adjusted margin-top */
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            text-align: center;
+      }
+      @media (orientation: landscape) {
+        #navbar ul {
+          display: inline-block;
         }
-        h2 {
-            margin-top: 0;
+      }
+
+      #navbar li {
+        display: inline-block;
+      }
+
+      #navbar li a {
+        color: rgb(13, 26, 38);
+        display: block;
+        font-size: 0.7em;
+        height: 50px;
+        letter-spacing: 1px;
+        margin: 0 20px;
+        padding: 0 4px;
+        position: relative;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition: all 0.5s ease;
+        -webkit-transition: all 0.5s ease;
+      }
+
+      #navbar li a:hover {
+        /* border-bottom: 1px solid rgb(28, 121, 184); */
+        color: rgb(28, 121, 184);
+        transition: all 1s ease;
+        -webkit-transition: all 1s ease;
+      }
+
+      /* Animated Bottom Line */
+      #navbar li a:before,
+      #navbar li a:after {
+        content: "";
+        position: absolute;
+        width: 0%;
+        height: 1px;
+        bottom: -1px;
+        background: rgb(13, 26, 38);
+      }
+
+      #navbar li a:before {
+        left: 0;
+        transition: 0.5s;
+      }
+
+      #navbar li a:after {
+        background: rgb(13, 26, 38);
+        right: 0;
+        /* transition: width 0.8s cubic-bezier(0.22, 0.61, 0.36, 1); */
+      }
+
+      #navbar li a:hover:before {
+        background: rgb(13, 26, 38);
+        width: 100%;
+        transition: width 0.5s cubic-bezier((0.22, 0.61, 0.36, 1));
+      }
+
+      #navbar li a:hover:after {
+        background: transparent;
+        width: 100%;
+        /* transition: 0s; */
+      }
+
+      /*======================================================
+                    Mobile Menu Menu Icon
+  ======================================================*/
+      @media (max-width: 640px) {
+        .menuIcon {
+          cursor: pointer;
+          display: block;
+          position: fixed;
+          right: 15px;
+          top: 20px;
+          height: 23px;
+          width: 27px;
+          z-index: 12;
         }
-        form {
-            text-align: center;
+
+        /* Icon Bars */
+        .icon-bars {
+          background: rgb(13, 26, 38);
+          position: absolute;
+          left: 1px;
+          top: 45%;
+          height: 2px;
+          width: 20px;
+          -webkit-transition: 0.4s;
+          transition: 0.4s;
         }
-        div{
-            font-size: 16px;
-            margin-right: 20px;
+
+        .icon-bars::before {
+          background: rgb(13, 26, 38);
+          content: "";
+          position: absolute;
+          left: 0;
+          top: -8px;
+          height: 2px;
+          width: 20px;
+          /*     -webkit-transition: top 0.2s ease 0.3s;
+    transition: top 0.2s ease 0.3s; */
+          -webkit-transition: 0.3s width 0.4s;
+          transition: 0.3s width 0.4s;
         }
-        .extension-container {
-            position: fixed;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(244, 246, 247, 0.8);
-            padding: 5px 10px;
-            border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+
+        .icon-bars::after {
+          margin-top: 0px;
+          background: rgb(13, 26, 38);
+          content: "";
+          position: absolute;
+          left: 0;
+          bottom: -8px;
+          height: 2px;
+          width: 20px;
+          /*     -webkit-transition: top 0.2s ease 0.3s;
+    transition: top 0.2s ease 0.3s; */
+          -webkit-transition: 0.3s width 0.4s;
+          transition: 0.3s width 0.4s;
         }
-        </style>
-</head>
-<body>
-    <div class="navbar">
-        <a href="{{ url_for('profile.profilePage') }}">
-            <i class="fas fa-user"></i> 
-        </a>
-        <span>{{ text }}</span> 
-        <div><a href="{{ url_for('views.logout') }}">Logout</a> </div> 
-    </div>
-    
-    <form method="post">
-    <button type="submit" name="action" value ="viewMyInfo">View My Info</button>
-    </form>
+
+        /* Bars Shadows */
+        .icon-bars.overlay {
+          background: rgb(97, 114, 129);
+          background: rgb(183, 199, 211);
+          width: 20px;
+          animation: middleBar 3s infinite 0.5s;
+          -webkit-animation: middleBar 3s infinite 0.5s;
+        }
+        @keyframes middleBar {
+          0% {
+            width: 0px;
+          }
+          50% {
+            width: 20px;
+          }
+          100% {
+            width: 0px;
+          }
+        }
+        @-webkit-keyframes middleBar {
+          0% {
+            width: 0px;
+          }
+          50% {
+            width: 20px;
+          }
+          100% {
+            width: 0px;
+          }
+        }
+
+        .icon-bars.overlay::before {
+          background: rgb(97, 114, 129);
+          background: rgb(183, 199, 211);
+          width: 10px;
+          animation: topBar 3s infinite 0.2s;
+          -webkit-animation: topBar 3s infinite 0s;
+        }
+        @keyframes topBar {
+          0% {
+            width: 0px;
+          }
+          50% {
+            width: 10px;
+          }
+          100% {
+            width: 0px;
+          }
+        }
+        @-webkit-keyframes topBar {
+          0% {
+            width: 0px;
+          }
+          50% {
+            width: 10px;
+          }
+          100% {
+            width: 0px;
+          }
+        }
+
+        .icon-bars.overlay::after {
+          background: rgb(97, 114, 129);
+          background: rgb(183, 199, 211);
+          width: 15px;
+          animation: bottomBar 3s infinite 1s;
+          -webkit-animation: bottomBar 3s infinite 1s;
+        }
+        @keyframes bottomBar {
+          0% {
+            width: 0px;
+          }
+          50% {
+            width: 15px;
+          }
+          100% {
+            width: 0px;
+          }
+        }
+        @-webkit-keyframes bottomBar {
+          0% {
+            width: 0px;
+          }
+          50% {
+            width: 15px;
+          }
+          100% {
+            width: 0px;
+          }
+        }
+
+        /* Toggle Menu Icon */
+        .menuIcon.toggle .icon-bars {
+          top: 5px;
+          transform: translate3d(0, 5px, 0) rotate(135deg);
+          transition-delay: 0.1s;
+          transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .menuIcon.toggle .icon-bars::before {
+          top: 0;
+          transition-delay: 0.1s;
+          opacity: 0;
+        }
+
+        .menuIcon.toggle .icon-bars::after {
+          top: 10px;
+          transform: translate3d(0, -10px, 0) rotate(-270deg);
+          transition-delay: 0.1s;
+          transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .menuIcon.toggle .icon-bars.overlay {
+          width: 20px;
+          opacity: 0;
+          -webkit-transition: all 0s ease 0s;
+          transition: all 0s ease 0s;
+        }
+      }
+
+      /*======================================================
+                   Responsive Mobile Menu 
+  ======================================================*/
+      .overlay-menu {
+        background: lightblue;
+        color: rgb(13, 26, 38);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding-right: 15px;
+        transform: translateX(-100%);
+        width: 100vw;
+        height: 100vh;
+        -webkit-transition: transform 0.2s ease-out;
+        transition: transform 0.2s ease-out;
+      }
+
+      .overlay-menu ul,
+      .overlay-menu li {
+        display: block;
+        position: relative;
+      }
+
+      .overlay-menu li a {
+        display: block;
+        font-size: 1.8em;
+        letter-spacing: 4px;
+        /*   opacity: 0; */
+        padding: 10px 0;
+        text-align: right;
+        text-transform: uppercase;
+        -webkit-transition: color 0.3s ease;
+        transition: color 0.3s ease;
+        /*   -webkit-transition: 0.2s opacity 0.2s ease-out;
+  transition: 0.2s opacity 0.2s ease-out; */
+      }
+
+      .overlay-menu li a:hover,
+      .overlay-menu li a:active {
+        color: rgb(28, 121, 184);
+        -webkit-transition: color 0.3s ease;
+        transition: color 0.3s ease;
+      }
+      input[type="file"]::file-selector-button {
+        text-decoration: none;
+        background-color: #005af0;
+        color: #ffffff;
+        padding: 10px 20px;
+        border: none;
+        outline: none;
+        transition: 0.3s;
+      }
+
+      input[type="file"]::file-selector-button:hover {
+        text-decoration: none;
+        background-color: #ffffff;
+        color: #005af0;
+        padding: 10px 20px;
+        border: 1px;
+        outline: 1px solid #010101;
+      }
+    </style>
+  </head>
+  <body>
+    <link
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+    <nav id="navbar" class="">
+      <div class="nav-wrapper">
+        <!-- THIS IS TO BE IMPLEMENTED -->
+        <div class="logo">
+          <a href="{{ url_for('profile.profilePage') }}">
+            <i class="fas fa-user"></i>
+          </a>
+        </div>
+        <span>{{ text }}</span>
+        <ul id="menu">
+          <li><a href="{{ url_for('views.logout') }}">Logout</a></li>
+        </ul>
+      </div>
+    </nav>
+
     <div class="container">
-        <h2>Upload a File</h2>
-        <form method="post" enctype="multipart/form-data">
-            <input type="file" name="fileToUpload" id="fileToUpload">
-            <button type="submit" name="submit">Submit</button>
-        </form>
-        <br><br>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-            <div class="alert alert-{{ category }}" style="color:black">
-                {{ message }}
-            </div>
-            {% endfor %}
-            {% endif %}
-            {% endwith %}
-    
+      <div class="card">
+        <h3>Upload File</h3>
+        <div class="drop_box">
+          <header>
+            <h4>Select File here</h4>
+          </header>
+          <p>Files Supported: JPEG, JPG, PNG</p>
+          <form method="post" enctype="multipart/form-data">
+            <input
+              type="file"
+              accept=".jpeg,.jpg,.png"
+              id="fileID"
+              name="fileToUpload"
+              id="fileToUpload"
+            />
+            <button type="submit" class="btn" name="submit">Submit</button>
+          </form>
+        </div>
+      </div>
+      <div class="alert alert-{{ category }}" style="color: black">{{ message }}</div>
+      <form method="post">
+        <button type="submit" class="btn" name="action" value="viewMyInfo">View My Info</button>
+      </form>
     </div>
-    <p></p><p></p>
-    <div class="extension-container">
-        Available extensions: jpeg, jpg, png
-    </div>
-</body>
+
+    <script>
+      //   NAVBAR
+      let nav = document.querySelector(".overlay-menu");
+
+      menuIcon.addEventListener("click", () => {
+        if (nav.style.transform != "translateX(0%)") {
+          nav.style.transform = "translateX(0%)";
+          nav.style.transition = "transform 0.2s ease-out";
+        } else {
+          nav.style.transform = "translateX(-100%)";
+          nav.style.transition = "transform 0.2s ease-out";
+        }
+      });
+
+      // Toggle Menu Icon ========================================
+      let toggleIcon = document.querySelector(".menuIcon");
+
+      toggleIcon.addEventListener("click", () => {
+        if (toggleIcon.className != "menuIcon toggle") {
+          toggleIcon.className += " toggle";
+        } else {
+          toggleIcon.className = "menuIcon";
+        }
+      });
+    </script>
+  </body>
 </html>

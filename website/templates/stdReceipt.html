@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>A simple, clean, and responsive HTML invoice template</title>
+    <title>Receipt-{{ receipt_no }}</title>
 
     <style>
       .invoice-box {
@@ -107,7 +107,7 @@
               <tr>
                 <td>
                   <img
-                    src="{{ url_for('static', filename='images/logo1.png') }}"
+                    src="{{ url_for('static', filename='./images/logo1.png') }}"
                     alt="Brand Logo"
                     style="width: 100%; height: 80px; max-width: 700px"
                   />
@@ -125,9 +125,9 @@
         <tr>
           <td></td>
           <td>
-            Invoice #: 123<br />
-            Title: {{extractedData[0]}} <br />Recipt date: {{extractedData[1]}}<br />
-            Phone Number: {{extractedData[3]}}<br />
+            Invoice #: {{ receipt_no }}<br />
+            Title: {{ title }} <br />Receipt date: {{ date }}<br />
+            Phone Number: {{ phone_no }}<br />
             Created at: April 4, 2024 <br />
           </td>
         </tr>
@@ -136,7 +136,15 @@
           <td>Price</td>
         </tr>
 
+        {% for i in item_names %} {% set item_1 = item_names[loop.index-1] %} {% set item_2 =
+        prices[loop.index-1] %}
         <tr class="item">
+          <td>{{ item_1 }}</td>
+          <td>{{ item_2 }}</td>
+        </tr>
+        {% endfor %}
+
+        <!-- <tr class="item">
           <td>Website design</td>
           <td>$300.00</td>
         </tr>
@@ -150,10 +158,10 @@
           <td>Domain name (1 year)</td>
           <td>$10.00</td>
         </tr>
-
+ -->
         <tr class="total">
           <td></td>
-          <td>Total: $385.00</td>
+          <td>Total: {{ total }}</td>
         </tr>
       </table>
     </div>

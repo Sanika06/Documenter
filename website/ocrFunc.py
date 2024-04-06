@@ -16,7 +16,7 @@ from spacy.matcher import Matcher
 from datetime import datetime
 from sqlalchemy import desc
 from langdetect import detect
-from translate import Translator
+import pdfkit
 from googletrans import Translator
 
 from io import BytesIO
@@ -51,14 +51,21 @@ def extract_title(contentFound):
 
 def extract_date(contentFound):
     date_pattern = re.compile(r'\b(?:\d{4}[-/]\d{1,2}[-/]\d{1,2}|(?:\d{1,2}[-/.])?\d{1,2}[-/.]\d{2,4}|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*[-\s]\d{1,2}(?:st|nd|rd|th)?(?:,\s+\d{2,4})?|\b(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)\b(?:day)?(?:,?\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))?(?:\s+\d{2,4})?|\d{1,2}:\d{2}\s*(?:a.m.|p.m.)?|\d{1,2}(?:\.\d{2})?\s*(?:a.m.|p.m.|hours)?|(?:\d{1,2}(?:\s*(?:a.m.|p.m.|hours))?|midnight|noon)(?:\s+(?:at\s+)?(?:\d{1,2}:\d{2})?(?:\s*(?:a.m.|p.m.))?)?)\b')
+    
+    matches = date_pattern.findall(contentFound)
+    if matches:
+        print("Date: ", matches[0])
+        return matches[0]
+    else:
+        return "NA"
 
-    matches = re.findall(date_pattern, contentFound)
-    for match in matches:
-        if re.search(r'Date\s?' + re.escape(match), contentFound):
-            # print(match)
-            return match
-        else:
-            return "NA"
+    # matches = re.findall(date_pattern, contentFound)
+    # for match in matches:
+    #     if re.search(r'Date\s?' + re.escape(match), contentFound):
+    #         # print(match)
+    #         return match
+    #     else:
+    #         return "NA"
 
 def extract_phone_numbers(text):
     pattern = r'\b(?:\d{5}[-.\s]??\d{5}|\d{10})\b'
@@ -68,15 +75,13 @@ def extract_phone_numbers(text):
     return phone_numbers[0] if(phone_numbers) else "NA"
 
 def extract_total(contentFound):
-    total_index = contentFound.find('Total')
-    if total_index != -1:
-        total_match = re.search(r'\d+\.\d+', contentFound[total_index:])
-        if total_match:
-            total_value = total_match.group()
-            print("Next Value after 'Total':", total_value)
-            return total_value
-        else:
-            return "NA"    
+    total_pattern = re.compile(r'(?:Total|Total\s*:?)\s*(?:[\s$€₹])*(\d{1,9}(?:[,\.]\d{3})*(?:\.\d+)?)')
+    matches = total_pattern.findall(contentFound)
+    if matches:
+        print("Total: ", matches[0])
+        return matches[0]
+    else:
+        return "NA"
 
 def extract_items_and_prices(content):
     item_name_pattern = re.compile(r'\((\d+)\)\s*(.*?)\s*-\s*(\d+)')
@@ -84,7 +89,6 @@ def extract_items_and_prices(content):
     item_names = [match[1].strip() for match in matches]
     prices = [int(match[2]) for match in matches]
     return item_names, prices
-
 
 def getReceiptInfo(filename):
     contentFound = ""
@@ -95,7 +99,7 @@ def getReceiptInfo(filename):
         contentFoundList.append(detection[1])
         # contentFound += " "
 
-    # print(contentFoundList)
+    print(contentFoundList)
 
     # language = detect(contentFoundList)
 
@@ -120,6 +124,22 @@ def getReceiptInfo(filename):
     extractedData.append(phone_number)
 
     return extractedData
+
+def generate_and_save_pdf(current_receipt_no, email, Title, Date, Total, Phone, item_names, prices):
+    filename = f"Receipt-{current_receipt_no}.pdf"
+
+    html = render_template("stdReceipt.html", receipt_no = current_receipt_no, title = Title, date = Date, total = Total, phone_no = Phone, item_names = item_names, prices = prices)
+    pdf = pdfkit.from_string(html, options={"enable-local-file-access": ""})
+
+    # Save the PDF file to the specified folder
+    newPath = os.path.join(app.config['UPLOAD_FOLDER'], email, 'std')
+    if not os.path.exists(newPath):
+        os.makedirs(newPath)
+    pdf_path = os.path.join(newPath, filename)
+    with open(pdf_path, 'wb') as f:
+        f.write(pdf)
+
+    return pdf_path
 
 @ocrFunc.route("/scanning", methods=['GET','POST'])
 def scanning():
