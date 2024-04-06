@@ -75,7 +75,7 @@ def extract_phone_numbers(text):
     return phone_numbers[0] if(phone_numbers) else "NA"
 
 def extract_total(contentFound):
-    total_pattern = re.compile(r'(?:Total|Total\s*:?)\s*(?:[\s$€₹])*(\d{1,9}(?:[,\.]\d{3})*(?:\.\d+)?)')
+    total_pattern = re.compile(r'(?:Total|Amount)\s*(?::?[\s$€₹])*(\d{1,9}(?:[,\.]\d{3})*(?:\.\d+)?)')
     matches = total_pattern.findall(contentFound)
     if matches:
         print("Total: ", matches[0])

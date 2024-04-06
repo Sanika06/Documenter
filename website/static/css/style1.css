@@ -5,9 +5,8 @@
 .flash-messages {
   list-style-type: none;
   padding: 0;
-  text-align: center; 
+  text-align: center;
 }
-
 
 body {
   -webkit-user-select: none;
@@ -117,7 +116,7 @@ body {
 .screen-1 .login {
   padding: 1em;
   background: #3e4684;
-  color: rgb(118, 191, 173);
+  color: white;
   border: none;
   border-radius: 30px;
   font-weight: 600;
